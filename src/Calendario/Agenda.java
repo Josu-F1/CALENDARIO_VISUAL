@@ -304,6 +304,7 @@ private void iniciarRecordatorioDeEventos() {
         jBntAgregarEvento = new javax.swing.JButton();
         jBtnEliminar = new javax.swing.JButton();
         jBtnEditar = new javax.swing.JButton();
+        jBntReportes = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -340,6 +341,13 @@ private void iniciarRecordatorioDeEventos() {
             }
         });
 
+        jBntReportes.setText("Generar Reportes");
+        jBntReportes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBntReportesActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -352,6 +360,8 @@ private void iniciarRecordatorioDeEventos() {
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jBntReportes, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30)
                 .addComponent(jBntAgregarEvento, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(46, 46, 46)
                 .addComponent(jBtnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -374,7 +384,8 @@ private void iniciarRecordatorioDeEventos() {
                     .addComponent(jBtnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jBtnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jBntAgregarEvento, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jBntAgregarEvento, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jBntReportes, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(35, 35, 35))
         );
 
@@ -392,6 +403,11 @@ private void iniciarRecordatorioDeEventos() {
     private void jBtnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnEliminarActionPerformed
         eliminarEventoSeleccionado();
     }//GEN-LAST:event_jBtnEliminarActionPerformed
+
+    private void jBntReportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBntReportesActionPerformed
+        new VentanaReportes().setVisible(true);        
+// TODO add your handling code here:
+    }//GEN-LAST:event_jBntReportesActionPerformed
 
     /**
      * @param args the command line arguments
@@ -431,6 +447,7 @@ private void iniciarRecordatorioDeEventos() {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBntAgregarEvento;
+    private javax.swing.JButton jBntReportes;
     private javax.swing.JButton jBtnEditar;
     private javax.swing.JButton jBtnEliminar;
     private com.toedter.calendar.JCalendar jCalendar1;
