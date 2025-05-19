@@ -400,7 +400,7 @@ buscarPorMes();        // TODO add your handling code here:
             return;
         }
 
-        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/calendar", "root", "64470308")) {
+        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/calendar", "root", "")) {
             String sql = "SELECT * FROM calendar WHERE Date = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setDate(1, java.sql.Date.valueOf(fechaTexto));
@@ -433,7 +433,7 @@ buscarPorMes();        // TODO add your handling code here:
         return;
     }
 
-    try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/calendar", "root", "64470308")) {
+    try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/calendar", "root", "")) {
         String sql = "SELECT * FROM calendar WHERE MONTH(Date) = ? AND YEAR(Date) = ?";
         PreparedStatement stmt = conn.prepareStatement(sql);
         stmt.setInt(1, Integer.parseInt(mes));

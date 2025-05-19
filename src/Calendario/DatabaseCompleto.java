@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class DatabaseCompleto {
     private String url = "jdbc:mysql://localhost/calendar";
     private String user = "root";
-    private String pass = "64470308";
+    private String pass = "";
     private Connection connection;
 
     public DatabaseCompleto() {
@@ -19,7 +19,7 @@ public class DatabaseCompleto {
         public static Connection getConnection() throws SQLException {
         String url = "jdbc:mysql://localhost/calendar";
         String user = "root";
-        String password = "64470308"; // cambia según tu config
+        String password = ""; // cambia según tu config
 
         return DriverManager.getConnection(url, user, password);
     }
