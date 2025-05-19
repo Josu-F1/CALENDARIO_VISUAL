@@ -8,8 +8,9 @@
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
 	<style name="Detail" fontName="Arial" fontSize="12"/>
 	<parameter name="Date" class="java.lang.String"/>
+	<parameter name="user_id" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[select * from calendar where Date=$P{Date};]]>
+		<![CDATA[SELECT * FROM calendar WHERE Date = $P{Date} AND user_id = $P{user_id};]]>
 	</queryString>
 	<field name="ID" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>

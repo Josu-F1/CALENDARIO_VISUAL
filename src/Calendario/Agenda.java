@@ -283,6 +283,7 @@ private void iniciarRecordatorioDeEventos() {
             }
         }
     });
+    
 
     recordatorio.setDaemon(true);
     recordatorio.start();

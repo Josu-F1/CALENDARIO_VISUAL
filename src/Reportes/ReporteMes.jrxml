@@ -9,9 +9,11 @@
 	<style name="Detail" fontName="Arial" fontSize="12"/>
 	<parameter name="Anio" class="java.lang.String"/>
 	<parameter name="Mes" class="java.lang.String"/>
+	<parameter name="user_id" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT * FROM calendar
-WHERE MONTH(Date) = $P{Mes} AND YEAR(Date) = $P{Anio};]]>
+WHERE MONTH(Date) = $P{Mes} AND YEAR(Date) = $P{Anio} AND user_id = $P{user_id};
+]]>
 	</queryString>
 	<field name="ID" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
