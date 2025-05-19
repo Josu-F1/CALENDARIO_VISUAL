@@ -375,7 +375,40 @@ String fechaStr = anio + "-" + mes + "-" + dia;
     }//GEN-LAST:event_btnGenerarReporteMesActionPerformed
 
     private void btnR2GraficoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnR2GraficoActionPerformed
-        // TODO add your handling code here:
+       try {
+            String dia = cmbDia.getSelectedItem().toString();
+String mes = cmbMes.getSelectedItem().toString();
+String anio = cmbAnio.getSelectedItem().toString();
+String fechaStr = anio + "-" + mes + "-" + dia;
+
+
+            if (fechaStr.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Por favor ingrese una fecha en formato YYYY-MM-DD.");
+                return;
+            }
+
+            // Convertir fecha
+            java.sql.Date fecha = java.sql.Date.valueOf(fechaStr);
+
+            // Parámetros
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("Date", fecha); // este debe coincidir con el nombre del parámetro en tu jrxml
+            mostrarReporte("src/Reportes/ReporteGraficassss.jasper", parametros);
+            /*
+            // Cargar reporte
+            JasperReport reporte = JasperCompileManager.compileReport("JasperReport reporte = JasperCompileManager.compileReport(\"C:/Users/MARLON/Documents/NetBeansProjects/AntesPruebita/CALENDARIO_VISUAL/Reportes/ReporteFechas.jrxml\");");
+
+            // Conexión usando tu clase
+            Connection conn = DatabaseCompleto.getConnection();
+
+            // Rellenar y mostrar
+            JasperPrint print = JasperFillManager.fillReport(reporte, parametros, conn);
+            JasperViewer.viewReport(print, false);
+*/
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al generar el reporte: " + ex.getMessage());
+        }
     }//GEN-LAST:event_btnR2GraficoActionPerformed
 
     private void cmbMesR2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbMesR2ActionPerformed
