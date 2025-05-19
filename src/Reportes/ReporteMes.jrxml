@@ -54,40 +54,30 @@ WHERE MONTH(Date) = $P{Mes} AND YEAR(Date) = $P{Anio} AND user_id = $P{user_id};
 	</pageHeader>
 	<columnHeader>
 		<band height="36" splitType="Stretch">
-			<line>
-				<reportElement positionType="FixRelativeToBottom" x="0" y="35" width="555" height="1" uuid="0f3b212e-2000-4465-991d-412001d8a245"/>
-				<graphicElement>
-					<pen lineWidth="0.5" lineColor="#999999"/>
-				</graphicElement>
-			</line>
 			<staticText>
 				<reportElement style="Column header" x="0" y="19" width="92" height="15" uuid="5cc3c113-f543-451e-889e-cbbc24e1a18c"/>
-				<text><![CDATA[ID]]></text>
+				<text><![CDATA[Numero Evento]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="92" y="19" width="92" height="15" uuid="7694b800-3326-42e8-89f5-963bb2ba1d24"/>
-				<text><![CDATA[Title]]></text>
+				<reportElement style="Column header" x="105" y="21" width="92" height="15" uuid="7694b800-3326-42e8-89f5-963bb2ba1d24"/>
+				<text><![CDATA[Titulo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="184" y="19" width="92" height="15" uuid="74e9552c-c860-4aa1-9743-bccfd73c7ca3"/>
-				<text><![CDATA[Description]]></text>
+				<reportElement style="Column header" x="197" y="19" width="92" height="15" uuid="74e9552c-c860-4aa1-9743-bccfd73c7ca3"/>
+				<text><![CDATA[Descripcion]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="276" y="19" width="92" height="15" uuid="d9474772-ad13-4cf1-9701-098364a11455"/>
-				<text><![CDATA[Date]]></text>
+				<reportElement style="Column header" x="299" y="19" width="92" height="15" uuid="d9474772-ad13-4cf1-9701-098364a11455"/>
+				<text><![CDATA[Fecha]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="368" y="19" width="92" height="15" uuid="9b31c913-d7aa-4636-8f15-4b293032fb22"/>
-				<text><![CDATA[Time]]></text>
-			</staticText>
-			<staticText>
-				<reportElement style="Column header" x="460" y="19" width="92" height="15" uuid="48f8ba33-c9c7-4066-88b4-16f706f928bb"/>
-				<text><![CDATA[user_id]]></text>
+				<reportElement style="Column header" x="421" y="21" width="92" height="15" uuid="9b31c913-d7aa-4636-8f15-4b293032fb22"/>
+				<text><![CDATA[Hora]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="16" splitType="Stretch">
+		<band height="66" splitType="Stretch">
 			<line>
 				<reportElement positionType="FixRelativeToBottom" x="0" y="15" width="555" height="1" uuid="5b75af8d-815f-4ae7-b628-0a46c3b29dea"/>
 				<graphicElement>
@@ -103,25 +93,27 @@ WHERE MONTH(Date) = $P{Mes} AND YEAR(Date) = $P{Anio} AND user_id = $P{user_id};
 				<textFieldExpression><![CDATA[$F{Title}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Detail" x="184" y="0" width="92" height="15" uuid="7f784ab9-0882-4b4a-b437-7a15081e6fc2"/>
+				<reportElement style="Detail" x="197" y="0" width="92" height="15" uuid="7f784ab9-0882-4b4a-b437-7a15081e6fc2"/>
 				<textFieldExpression><![CDATA[$F{Description}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Detail" x="276" y="0" width="92" height="15" uuid="4ebe2390-6439-4df5-ade2-3eb138c995d1"/>
+				<reportElement style="Detail" x="299" y="0" width="92" height="15" uuid="4ebe2390-6439-4df5-ade2-3eb138c995d1"/>
 				<textFieldExpression><![CDATA[$F{Date}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Detail" x="368" y="0" width="92" height="15" uuid="8e67377b-e701-4538-8d8d-79b8f6e2f730"/>
+				<reportElement style="Detail" x="421" y="2" width="92" height="15" uuid="8e67377b-e701-4538-8d8d-79b8f6e2f730"/>
 				<textFieldExpression><![CDATA[$F{Time}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement style="Detail" x="460" y="0" width="92" height="15" uuid="3842c814-4a03-41bc-b77c-36ec335c86f1"/>
-				<textFieldExpression><![CDATA[$F{user_id}]]></textFieldExpression>
-			</textField>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="35" width="555" height="1" uuid="0f3b212e-2000-4465-991d-412001d8a245"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="45" splitType="Stretch">
+		<band height="99" splitType="Stretch">
 			<line>
 				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="3e2daf44-ef4d-490f-bdaf-e2e23ba42dbf"/>
 				<graphicElement>
