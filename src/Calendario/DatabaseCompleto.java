@@ -74,20 +74,22 @@ public class DatabaseCompleto {
         return events;
     }
 
-    // Insertar evento con userID
-    public void addEvent(Event e, int userID) {
-        String sql = "INSERT INTO calendar (Title, Description, Date, Time, user_id) VALUES (?, ?, ?, ?, ?)";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, e.getTitle());
-            ps.setString(2, e.getDescription());
-            ps.setString(3, e.getDate());
-            ps.setString(4, e.getTime());
-            ps.setInt(5, userID);
-            ps.executeUpdate();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
+// Versión corregida de addEvent
+public boolean addEvent(Event e, int userID) {
+    String sql = "INSERT INTO calendar (Title, Description, Date, Time, user_id) VALUES (?, ?, ?, ?, ?)";
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setString(1, e.getTitle());
+        ps.setString(2, e.getDescription());
+        ps.setString(3, e.getDate());
+        ps.setString(4, e.getTime());
+        ps.setInt(5, userID);
+        int filas = ps.executeUpdate();
+        return filas > 0;
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+        return false;
     }
+}
 
     public boolean eliminarEvento(int idEvento) {
         String sql = "DELETE FROM calendar WHERE ID = ?";
