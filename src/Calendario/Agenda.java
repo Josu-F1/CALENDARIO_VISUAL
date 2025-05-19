@@ -16,13 +16,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import javax.sound.sampled.*;
 
-
 public class Agenda extends javax.swing.JFrame {
 
     private User loggedUser;
     private DatabaseCompleto db;
     private DefaultTableModel model;
-    
 
     public Agenda(User user) {
         this.loggedUser = user;
@@ -41,68 +39,101 @@ public class Agenda extends javax.swing.JFrame {
 
         jCalendar1.addPropertyChangeListener("calendar", e -> cargarEventosDelDia());
         cargarEventosDelDia();
-        iniciarRecordatorioDeEventos();
+
+        RecordatorioThread recordatorio = new RecordatorioThread(db, loggedUser, this);
+        recordatorio.start();
     }
 
     // Método para mostrar el formulario de nuevo evento
     private void mostrarFormularioEvento() {
-        boolean eventoValido = false;
+    boolean eventoValido = false;
 
-        // Variables que persisten entre intentos
-        String tituloPrevio = "";
-        String descripcionPrevia = "";
-        Date horaPrevia = new Date();
+    String tituloPrevio = "";
+    String descripcionPrevia = "";
+    Date horaPrevia = new Date();
 
-        while (!eventoValido) {
-            JTextField titulo = new JTextField(tituloPrevio);
-            JTextField descripcion = new JTextField(descripcionPrevia);
-            SpinnerDateModel modeloSpinner = new SpinnerDateModel();
-            JSpinner horaSpinner = new JSpinner(modeloSpinner);
-            horaSpinner.setEditor(new JSpinner.DateEditor(horaSpinner, "HH:mm"));
-            horaSpinner.setValue(horaPrevia);
+    while (!eventoValido) {
+        JTextField titulo = new JTextField(tituloPrevio);
+        JTextField descripcion = new JTextField(descripcionPrevia);
+        SpinnerDateModel modeloSpinner = new SpinnerDateModel();
+        JSpinner horaSpinner = new JSpinner(modeloSpinner);
+        horaSpinner.setEditor(new JSpinner.DateEditor(horaSpinner, "HH:mm"));
+        horaSpinner.setValue(horaPrevia);
 
-            JPanel panel = new JPanel(new GridLayout(0, 1));
-            panel.add(new JLabel("Título:"));
-            panel.add(titulo);
-            panel.add(new JLabel("Descripción:"));
-            panel.add(descripcion);
-            panel.add(new JLabel("Hora (HH:mm):"));
-            panel.add(horaSpinner);
+        JPanel panel = new JPanel(new GridLayout(0, 1));
+        panel.add(new JLabel("Título:"));
+        panel.add(titulo);
+        panel.add(new JLabel("Descripción:"));
+        panel.add(descripcion);
+        panel.add(new JLabel("Hora (HH:mm):"));
+        panel.add(horaSpinner);
 
-            int res = JOptionPane.showConfirmDialog(this, panel, "Nuevo Evento", JOptionPane.OK_CANCEL_OPTION);
-            if (res == JOptionPane.OK_OPTION) {
-                String nuevoTitulo = titulo.getText().trim();
-                String nuevaDescripcion = descripcion.getText().trim();
+        int res = JOptionPane.showConfirmDialog(this, panel, "Nuevo Evento", JOptionPane.OK_CANCEL_OPTION);
 
-                // Guardar los valores temporalmente
-                tituloPrevio = nuevoTitulo;
-                descripcionPrevia = nuevaDescripcion;
-                horaPrevia = (Date) horaSpinner.getValue();
+        if (res == JOptionPane.OK_OPTION) {
+            String nuevoTitulo = titulo.getText().trim();
+            String nuevaDescripcion = descripcion.getText().trim();
+            horaPrevia = (Date) horaSpinner.getValue(); // para reutilizar si hay error
 
-                // Obtener fecha y hora
-                SimpleDateFormat sdfFecha = new SimpleDateFormat("yyyy-MM-dd");
-                String fecha = sdfFecha.format(jCalendar1.getDate());
+            tituloPrevio = nuevoTitulo;
+            descripcionPrevia = nuevaDescripcion;
 
-                SimpleDateFormat sdfHora = new SimpleDateFormat("HH:mm");
-                String horaStr = sdfHora.format(horaPrevia);
-
-                // Validar si ya hay evento a esa hora
-                if (db.existeEventoEnMismaHora(fecha, horaStr, loggedUser.getID(), null)) {
-                    JOptionPane.showMessageDialog(this, "Ya tienes un evento a esa hora. Elige otra hora.", "Conflicto", JOptionPane.WARNING_MESSAGE);
-                    continue; // volver a mostrar el formulario con los datos previos
-                }
-
-                // Si no hay conflicto, guardar
-                Event nuevo = new Event(nuevoTitulo, nuevaDescripcion, fecha, horaStr);
-                db.addEvent(nuevo, loggedUser.getID());
-                cargarEventosDelDia();
-                eventoValido = true;
-            } else {
-                // Si el usuario presiona "Cancelar"
-                eventoValido = true;
+            // Validar campos vacíos
+            if (nuevoTitulo.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "El título del evento no puede estar vacío.", "Error", JOptionPane.WARNING_MESSAGE);
+                continue;
             }
+
+            if (nuevaDescripcion.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "La descripción del evento no puede estar vacía.", "Error", JOptionPane.WARNING_MESSAGE);
+                continue;
+            }
+
+            // Validar que el título y la descripción no contengan números
+            if (nuevoTitulo.matches(".*\\d.*")) {
+                JOptionPane.showMessageDialog(this, "El título no debe contener números.", "Error", JOptionPane.WARNING_MESSAGE);
+                continue;
+            }
+
+            if (nuevaDescripcion.matches(".*\\d.*")) {
+                JOptionPane.showMessageDialog(this, "La descripción no debe contener números.", "Error", JOptionPane.WARNING_MESSAGE);
+                continue;
+            }
+
+            // Validar hora
+            SimpleDateFormat sdfHora = new SimpleDateFormat("HH:mm");
+            String horaStr = sdfHora.format(horaPrevia);
+            if (horaStr.equals("00:00")) {
+                JOptionPane.showMessageDialog(this, "La hora no puede ser 00:00. Elige una hora válida.", "Error", JOptionPane.WARNING_MESSAGE);
+                continue;
+            }
+
+            // Formatear fecha
+            SimpleDateFormat sdfFecha = new SimpleDateFormat("yyyy-MM-dd");
+            String fecha = sdfFecha.format(jCalendar1.getDate());
+
+            // Validar conflicto de horario
+            if (db.existeEventoEnMismaHora(fecha, horaStr, loggedUser.getID(), null)) {
+                JOptionPane.showMessageDialog(this, "Ya tienes un evento a esa hora. Elige otra hora.", "Conflicto", JOptionPane.WARNING_MESSAGE);
+                continue;
+            }
+
+            // Crear evento
+            Event nuevo = new Event(nuevoTitulo, nuevaDescripcion, fecha, horaStr, loggedUser.getID());
+
+            if (db.addEvent(nuevo, loggedUser.getID())) {
+                cargarEventosDelDia();
+                JOptionPane.showMessageDialog(this, "Evento agregado correctamente.");
+            } else {
+                JOptionPane.showMessageDialog(this, "Ocurrió un error al guardar el evento.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            eventoValido = true;
+        } else {
+            eventoValido = true; // Salir si se cancela
         }
     }
+}
+
 
     // Método para cargar eventos del día seleccionado
     private void cargarEventosDelDia() {
@@ -195,104 +226,6 @@ public class Agenda extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Selecciona un evento para eliminar.");
         }
     }
-
-private void mostrarDialogoRecordatorio(Event e) {
-    // Reproduce el sonido inmediatamente
-    try {
-        InputStream audioSrc = getClass().getResourceAsStream("/sonidos/alerta.wav");
-        if (audioSrc == null) {
-            System.err.println("No se encontró el archivo de sonido.");
-            return;
-        }
-        AudioInputStream audio = AudioSystem.getAudioInputStream(new BufferedInputStream(audioSrc));
-        Clip clip = AudioSystem.getClip();
-        clip.open(audio);
-        clip.start();
-    } catch (Exception ex) {
-        ex.printStackTrace();
-    }
-
-    // Crear diálogo personalizado del recordatorio
-    JDialog dialog = new JDialog(this, "Recordatorio de evento", true);
-    dialog.setSize(400, 220);
-    dialog.setLocationRelativeTo(this);
-    dialog.setLayout(new BorderLayout());
-
-    JPanel contenido = new JPanel(new GridLayout(0, 1, 5, 5));
-    contenido.setBorder(BorderFactory.createEmptyBorder(20, 30, 10, 30));
-
-    JLabel titulo = new JLabel(e.getTitle(), SwingConstants.CENTER);
-    titulo.setFont(new Font("Segoe UI", Font.BOLD, 18));
-
-    JLabel descripcion = new JLabel("<html><div style='text-align:center;'>" + e.getDescription() + "</div></html>", SwingConstants.CENTER);
-    descripcion.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-
-    JLabel hora = new JLabel("<html><div style='text-align:center;'><b>Hora programada: " + e.getTime() + "</b></div></html>", SwingConstants.CENTER);
-    hora.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-    hora.setForeground(new Color(40, 40, 40));
-
-    contenido.add(titulo);
-    contenido.add(descripcion);
-    contenido.add(hora);
-
-    JButton cerrar = new JButton("Aceptar");
-    cerrar.setFocusPainted(false);
-    cerrar.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-    cerrar.addActionListener(a -> dialog.dispose());
-
-    JPanel pie = new JPanel();
-    pie.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-    pie.add(cerrar);
-
-    dialog.add(contenido, BorderLayout.CENTER);
-    dialog.add(pie, BorderLayout.SOUTH);
-    dialog.setResizable(false);
-    dialog.setVisible(true);
-}
-
-private void iniciarRecordatorioDeEventos() {
-    Thread recordatorio = new Thread(() -> {
-        ArrayList<String> eventosNotificados = new ArrayList<>();
-
-        while (true) {
-            try {
-                Thread.sleep(8_000); // Revisa cada 30 segundos para mayor precisión
-
-                String fechaActual = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-                String horaActual = new SimpleDateFormat("HH:mm").format(new Date());
-
-                ArrayList<Event> eventos = db.getEvents(fechaActual, loggedUser.getID());
-
-                for (Event e : eventos) {
-                    String claveEvento = e.getID() + "-" + horaActual;
-
-                    if (e.getTime().startsWith(horaActual) && !eventosNotificados.contains(claveEvento)) {
-                        eventosNotificados.add(claveEvento);
-
-                        // Beep del sistema
-                        Toolkit.getDefaultToolkit().beep();
-
-                        // Mostrar recordatorio visual
-                        SwingUtilities.invokeLater(() -> mostrarDialogoRecordatorio(e));
-                    }
-                }
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                break;
-            }
-        }
-    });
-
-    recordatorio.setDaemon(true);
-    recordatorio.start();
-}
-
-
-
-
-
-
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

@@ -2,8 +2,10 @@ package Calendario;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseCompleto {
+
     private String url = "jdbc:mysql://localhost/calendar";
     private String user = "root";
     private String pass = "";
@@ -57,11 +59,12 @@ public class DatabaseCompleto {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Event ev = new Event(
-                    rs.getInt("ID"),
-                    rs.getString("Title"),
-                    rs.getString("Description"),
-                    rs.getString("Date"),
-                    rs.getString("Time")
+                        rs.getInt("ID"),
+                        rs.getString("Title"),
+                        rs.getString("Description"),
+                        rs.getString("Date"),
+                        rs.getString("Time"),
+                        rs.getInt("user_id")
                 );
                 events.add(ev);
             }
@@ -71,84 +74,107 @@ public class DatabaseCompleto {
         return events;
     }
 
-    // Insertar evento con userID
-    public void addEvent(Event e, int userID) {
-        String sql = "INSERT INTO calendar (Title, Description, Date, Time, user_id) VALUES (?, ?, ?, ?, ?)";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, e.getTitle());
-            ps.setString(2, e.getDescription());
-            ps.setString(3, e.getDate());
-            ps.setString(4, e.getTime());
-            ps.setInt(5, userID);
-            ps.executeUpdate();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
+// Versión corregida de addEvent
+public boolean addEvent(Event e, int userID) {
+    String sql = "INSERT INTO calendar (Title, Description, Date, Time, user_id) VALUES (?, ?, ?, ?, ?)";
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setString(1, e.getTitle());
+        ps.setString(2, e.getDescription());
+        ps.setString(3, e.getDate());
+        ps.setString(4, e.getTime());
+        ps.setInt(5, userID);
+        int filas = ps.executeUpdate();
+        return filas > 0;
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+        return false;
     }
-    
+}
+
     public boolean eliminarEvento(int idEvento) {
-    String sql = "DELETE FROM calendar WHERE ID = ?";
-    try (PreparedStatement ps = connection.prepareStatement(sql)) {
-        ps.setInt(1, idEvento);
-        int result = ps.executeUpdate();
-        return result > 0;
-    } catch (SQLException e) {
-        e.printStackTrace();
-        return false;
+        String sql = "DELETE FROM calendar WHERE ID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, idEvento);
+            int result = ps.executeUpdate();
+            return result > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
-}
 
-    
     public boolean editarEvento(int id, String titulo, String descripcion, String hora) {
-    String sql = "UPDATE calendar SET Title = ?, Description = ?, Time = ? WHERE ID = ?";
-    try (PreparedStatement ps = connection.prepareStatement(sql)) {
-        ps.setString(1, titulo);
-        ps.setString(2, descripcion);
-        ps.setString(3, hora);
-        ps.setInt(4, id);
-        int res = ps.executeUpdate();
-        return res > 0;
-    } catch (SQLException e) {
-        e.printStackTrace();
+        String sql = "UPDATE calendar SET Title = ?, Description = ?, Time = ? WHERE ID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, titulo);
+            ps.setString(2, descripcion);
+            ps.setString(3, hora);
+            ps.setInt(4, id);
+            int res = ps.executeUpdate();
+            return res > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean existeEventoEnMismaHora(String fecha, String hora, int userId, Integer excluirId) {
+        String sql = "SELECT COUNT(*) FROM calendar WHERE Date = ? AND Time = ? AND user_id = ?";
+        if (excluirId != null) {
+            sql += " AND ID != ?";
+        }
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, fecha);
+            ps.setString(2, hora);
+            ps.setInt(3, userId);
+            if (excluirId != null) {
+                ps.setInt(4, excluirId);
+            }
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
-}
 
-    
-    public boolean existeEventoEnMismaHora(String fecha, String hora, int userId, Integer excluirId) {
-    String sql = "SELECT COUNT(*) FROM calendar WHERE Date = ? AND Time = ? AND user_id = ?";
-    if (excluirId != null) {
-        sql += " AND ID != ?";
-    }
+    public List<Event> obtenerEventosDelUsuario(int userId) {
+        List<Event> lista = new ArrayList<>();
+        String sql = "SELECT * FROM calendar WHERE user_id = ?";
 
-    try (PreparedStatement ps = connection.prepareStatement(sql)) {
-        ps.setString(1, fecha);
-        ps.setString(2, hora);
-        ps.setInt(3, userId);
-        if (excluirId != null) {
-            ps.setInt(4, excluirId);
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Event e = new Event(
+                        rs.getInt("ID"),
+                        rs.getString("Title"),
+                        rs.getString("Description"),
+                        rs.getString("Date"),
+                        rs.getString("Time"),
+                        rs.getInt("user_id")
+                );
+                lista.add(e);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            return rs.getInt(1) > 0;
-        }
-    } catch (SQLException e) {
-        e.printStackTrace();
+        return lista;
     }
-    return false;
-}
-
-
 
     public void close() {
         try {
-            if (connection != null && !connection.isClosed())
+            if (connection != null && !connection.isClosed()) {
                 connection.close();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-    
-    
+
 }
