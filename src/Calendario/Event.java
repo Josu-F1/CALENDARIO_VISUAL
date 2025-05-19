@@ -4,32 +4,32 @@
  */
 package Calendario;
 
-import java.time.LocalDateTime;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-
 public class Event {
 
     private int ID;
     private String title;
     private String description;
-    private String date;    // "yyyy-MM-dd"
-    private String time;    // "HH:mm"
+    private String date;    // formato "yyyy-MM-dd"
+    private String time;    // formato "HH:mm:ss"
+    private int userId;
 
-    public Event(String title, String description, String date, String time) {
-        this.title = title;
-        this.description = description;
-        this.date = date;
-        this.time = time;
-    }
-
-    public Event(int ID, String title, String description, String date, String time) {
+    // Constructor completo con ID y userId
+    public Event(int ID, String title, String description, String date, String time, int userId) {
         this.ID = ID;
         this.title = title;
         this.description = description;
         this.date = date;
         this.time = time;
+        this.userId = userId;
+    }
+
+    // Constructor para nuevos eventos sin ID (autogenerado)
+    public Event(String title, String description, String date, String time, int userId) {
+        this.title = title;
+        this.description = description;
+        this.date = date;
+        this.time = time;
+        this.userId = userId;
     }
 
     public Event() {}
@@ -73,6 +73,12 @@ public class Event {
     public void setTime(String time) {
         this.time = time;
     }
-    
-    
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 }

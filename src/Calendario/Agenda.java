@@ -41,7 +41,9 @@ public class Agenda extends javax.swing.JFrame {
 
         jCalendar1.addPropertyChangeListener("calendar", e -> cargarEventosDelDia());
         cargarEventosDelDia();
-        iniciarRecordatorioDeEventos();
+        
+         RecordatorioThread recordatorio = new RecordatorioThread(db, loggedUser, this);
+    recordatorio.start();
     }
 
     // Método para mostrar el formulario de nuevo evento
@@ -93,7 +95,7 @@ public class Agenda extends javax.swing.JFrame {
                 }
 
                 // Si no hay conflicto, guardar
-                Event nuevo = new Event(nuevoTitulo, nuevaDescripcion, fecha, horaStr);
+                Event nuevo = new Event(nuevoTitulo, nuevaDescripcion, fecha, horaStr, loggedUser.getID());
                 db.addEvent(nuevo, loggedUser.getID());
                 cargarEventosDelDia();
                 eventoValido = true;
@@ -195,102 +197,6 @@ public class Agenda extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Selecciona un evento para eliminar.");
         }
     }
-
-private void mostrarDialogoRecordatorio(Event e) {
-    // Reproduce el sonido inmediatamente
-    try {
-        InputStream audioSrc = getClass().getResourceAsStream("/sonidos/alerta.wav");
-        if (audioSrc == null) {
-            System.err.println("No se encontró el archivo de sonido.");
-            return;
-        }
-        AudioInputStream audio = AudioSystem.getAudioInputStream(new BufferedInputStream(audioSrc));
-        Clip clip = AudioSystem.getClip();
-        clip.open(audio);
-        clip.start();
-    } catch (Exception ex) {
-        ex.printStackTrace();
-    }
-
-    // Crear diálogo personalizado del recordatorio
-    JDialog dialog = new JDialog(this, "Recordatorio de evento", true);
-    dialog.setSize(400, 220);
-    dialog.setLocationRelativeTo(this);
-    dialog.setLayout(new BorderLayout());
-
-    JPanel contenido = new JPanel(new GridLayout(0, 1, 5, 5));
-    contenido.setBorder(BorderFactory.createEmptyBorder(20, 30, 10, 30));
-
-    JLabel titulo = new JLabel(e.getTitle(), SwingConstants.CENTER);
-    titulo.setFont(new Font("Segoe UI", Font.BOLD, 18));
-
-    JLabel descripcion = new JLabel("<html><div style='text-align:center;'>" + e.getDescription() + "</div></html>", SwingConstants.CENTER);
-    descripcion.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-
-    JLabel hora = new JLabel("<html><div style='text-align:center;'><b>Hora programada: " + e.getTime() + "</b></div></html>", SwingConstants.CENTER);
-    hora.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-    hora.setForeground(new Color(40, 40, 40));
-
-    contenido.add(titulo);
-    contenido.add(descripcion);
-    contenido.add(hora);
-
-    JButton cerrar = new JButton("Aceptar");
-    cerrar.setFocusPainted(false);
-    cerrar.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-    cerrar.addActionListener(a -> dialog.dispose());
-
-    JPanel pie = new JPanel();
-    pie.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-    pie.add(cerrar);
-
-    dialog.add(contenido, BorderLayout.CENTER);
-    dialog.add(pie, BorderLayout.SOUTH);
-    dialog.setResizable(false);
-    dialog.setVisible(true);
-}
-
-private void iniciarRecordatorioDeEventos() {
-    Thread recordatorio = new Thread(() -> {
-        ArrayList<String> eventosNotificados = new ArrayList<>();
-
-        while (true) {
-            try {
-                Thread.sleep(8_000); // Revisa cada 30 segundos para mayor precisión
-
-                String fechaActual = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-                String horaActual = new SimpleDateFormat("HH:mm").format(new Date());
-
-                ArrayList<Event> eventos = db.getEvents(fechaActual, loggedUser.getID());
-
-                for (Event e : eventos) {
-                    String claveEvento = e.getID() + "-" + horaActual;
-
-                    if (e.getTime().startsWith(horaActual) && !eventosNotificados.contains(claveEvento)) {
-                        eventosNotificados.add(claveEvento);
-
-                        // Beep del sistema
-                        Toolkit.getDefaultToolkit().beep();
-
-                        // Mostrar recordatorio visual
-                        SwingUtilities.invokeLater(() -> mostrarDialogoRecordatorio(e));
-                    }
-                }
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                break;
-            }
-        }
-    });
-
-    recordatorio.setDaemon(true);
-    recordatorio.start();
-}
-
-
-
-
 
 
 
