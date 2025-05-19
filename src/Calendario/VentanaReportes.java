@@ -420,9 +420,12 @@ buscarPorMes();        // TODO add your handling code here:
         }
 
         try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/calendar", "root", "")) {
-            String sql = "SELECT * FROM calendar WHERE Date = ?";
+            String sql = "SELECT * FROM calendar WHERE Date = ? AND user_id = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setDate(1, java.sql.Date.valueOf(fechaTexto));
+            
+            stmt.setInt(2, Login.currentUser.getId());  // <- usa el ID del usuario actual
+
             ResultSet rs = stmt.executeQuery();
 
             DefaultTableModel model = (DefaultTableModel) tablaEventos.getModel();
@@ -453,10 +456,11 @@ buscarPorMes();        // TODO add your handling code here:
     }
 
     try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/calendar", "root", "")) {
-        String sql = "SELECT * FROM calendar WHERE MONTH(Date) = ? AND YEAR(Date) = ?";
+        String sql = "SELECT * FROM calendar WHERE MONTH(Date) = ? AND YEAR(Date) = ? AND user_id = ?";
         PreparedStatement stmt = conn.prepareStatement(sql);
         stmt.setInt(1, Integer.parseInt(mes));
         stmt.setInt(2, Integer.parseInt(anio));
+        stmt.setInt(3, Login.currentUser.getId()); 
         ResultSet rs = stmt.executeQuery();
 
         DefaultTableModel model = (DefaultTableModel) tablaEventos.getModel();
