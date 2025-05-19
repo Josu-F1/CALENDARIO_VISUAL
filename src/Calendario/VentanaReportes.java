@@ -26,14 +26,27 @@ import net.sf.jasperreports.view.JasperViewer;
  * @author MARLON
  */
 public class VentanaReportes extends javax.swing.JFrame {
-
+  private Agenda agendaRef;
     /**
      * Creates new form VentanaReportes
      */
-    public VentanaReportes() {
+    public VentanaReportes(Agenda agenda) {
+        this.agendaRef = agenda;
         initComponents();
         llenarFechas();
         
+         // Sobrescribe el cierre generado por NetBeans
+    setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+    // Agrega comportamiento personalizado cuando la ventana se cierre
+    addWindowListener(new java.awt.event.WindowAdapter() {
+        @Override
+        public void windowClosed(java.awt.event.WindowEvent e) {
+            if (agendaRef != null) {
+                agendaRef.setVisible(true);
+            }
+        }
+    });
     }
 
     /**
@@ -64,7 +77,6 @@ public class VentanaReportes extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         cmbMesR2 = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
-        btnR1Grafico = new javax.swing.JButton();
         JButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -142,13 +154,6 @@ public class VentanaReportes extends javax.swing.JFrame {
 
         jLabel6.setText("Elija el mes");
 
-        btnR1Grafico.setText("Reporte Grafico");
-        btnR1Grafico.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnR1GraficoActionPerformed(evt);
-            }
-        });
-
         JButton1.setText("Buscar por mes/año");
         JButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -196,24 +201,21 @@ public class VentanaReportes extends javax.swing.JFrame {
                                             .addComponent(cmbAnioR2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                         .addGroup(layout.createSequentialGroup()
                                             .addGap(33, 33, 33)
-                                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addComponent(btnGenerarReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
                                             .addGap(3, 3, 3)))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(btnGenerarReporteMes)
                                         .addGap(4, 4, 4)
-                                        .addComponent(btnR2Grafico, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(btnGenerarReporte)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnR1Grafico, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(10, 10, 10))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(JButton)
-                        .addGap(52, 52, 52))
+                                        .addComponent(btnR2Grafico, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGap(11, 11, 11))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(JButton1)
-                        .addGap(64, 64, 64)))
+                        .addGap(64, 64, 64))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(JButton)
+                        .addGap(52, 52, 52)))
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 456, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -240,11 +242,9 @@ public class VentanaReportes extends javax.swing.JFrame {
                     .addComponent(cmbDia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(JButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnGenerarReporte)
-                    .addComponent(btnR1Grafico))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnGenerarReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -415,10 +415,6 @@ String fechaStr = anio + "-" + mes + "-" + dia;
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbMesR2ActionPerformed
 
-    private void btnR1GraficoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnR1GraficoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnR1GraficoActionPerformed
-
     private void JButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JButton1ActionPerformed
 buscarPorMes();        // TODO add your handling code here:
     }//GEN-LAST:event_JButton1ActionPerformed
@@ -549,7 +545,7 @@ buscarPorMes();        // TODO add your handling code here:
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new VentanaReportes().setVisible(true);
+                //new VentanaReportes().setVisible(true);
             }
         });
     }
@@ -559,7 +555,6 @@ buscarPorMes();        // TODO add your handling code here:
     private javax.swing.JButton JButton1;
     private javax.swing.JButton btnGenerarReporte;
     private javax.swing.JButton btnGenerarReporteMes;
-    private javax.swing.JButton btnR1Grafico;
     private javax.swing.JButton btnR2Grafico;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox<String> cmbAnio;

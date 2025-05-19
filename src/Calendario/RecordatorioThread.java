@@ -85,21 +85,22 @@ private void mostrarDialogoRecordatorio(Event e, long minutosRestantes) {
 
 
     private void reproducirSonido() {
-        new Thread(() -> {
-            try {
-                var audioSrc = getClass().getResourceAsStream("/sonidos/alerta.wav");
-                if (audioSrc != null) {
-                    var audio = javax.sound.sampled.AudioSystem.getAudioInputStream(
-                            new java.io.BufferedInputStream(audioSrc));
-                    var clip = javax.sound.sampled.AudioSystem.getClip();
-                    clip.open(audio);
-                    clip.start();
-                } else {
-                    System.err.println("No se encontró el archivo de sonido.");
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
+    new Thread(() -> {
+        try {
+            java.io.InputStream audioSrc = getClass().getResourceAsStream("/sonidos/alerta.wav");
+            if (audioSrc != null) {
+                javax.sound.sampled.AudioInputStream audio = javax.sound.sampled.AudioSystem.getAudioInputStream(
+                        new java.io.BufferedInputStream(audioSrc));
+                javax.sound.sampled.Clip clip = javax.sound.sampled.AudioSystem.getClip();
+                clip.open(audio);
+                clip.start();
+            } else {
+                System.err.println("No se encontró el archivo de sonido.");
             }
-        }).start();
-    }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }).start();
+}
+
 }
