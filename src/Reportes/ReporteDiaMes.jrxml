@@ -8,8 +8,9 @@
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
 	<style name="Detail" fontName="Arial" fontSize="12"/>
 	<parameter name="Date" class="java.lang.String"/>
+	<parameter name="user_id" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[select * from calendar where Date=$P{Date};]]>
+		<![CDATA[SELECT * FROM calendar WHERE Date = $P{Date} AND user_id = $P{user_id};]]>
 	</queryString>
 	<field name="ID" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -51,34 +52,30 @@
 	<columnHeader>
 		<band height="36" splitType="Stretch">
 			<line>
-				<reportElement positionType="FixRelativeToBottom" x="0" y="35" width="555" height="1" uuid="226e8741-730c-41a5-913c-6d53b29d1dac"/>
+				<reportElement positionType="FixRelativeToBottom" x="134" y="35" width="555" height="1" uuid="226e8741-730c-41a5-913c-6d53b29d1dac"/>
 				<graphicElement>
 					<pen lineWidth="0.5" lineColor="#999999"/>
 				</graphicElement>
 			</line>
 			<staticText>
 				<reportElement style="Column header" x="0" y="19" width="92" height="15" uuid="2ed47366-361f-4cc5-a112-e3d503c9418f"/>
-				<text><![CDATA[ID]]></text>
+				<text><![CDATA[Numero Evento]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="92" y="19" width="92" height="15" uuid="04f3fe6b-68e8-4760-9c8e-5ead274ecc6d"/>
-				<text><![CDATA[Title]]></text>
+				<reportElement style="Column header" x="105" y="19" width="92" height="15" uuid="04f3fe6b-68e8-4760-9c8e-5ead274ecc6d"/>
+				<text><![CDATA[Titulo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="184" y="19" width="92" height="15" uuid="7b8df301-1065-4f5e-9ccb-e4ff2a50872c"/>
-				<text><![CDATA[Description]]></text>
+				<reportElement style="Column header" x="209" y="19" width="92" height="15" uuid="7b8df301-1065-4f5e-9ccb-e4ff2a50872c"/>
+				<text><![CDATA[Descripcion]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="276" y="19" width="92" height="15" uuid="baf537ca-32ce-4865-abc2-bbc556ffb289"/>
-				<text><![CDATA[Date]]></text>
+				<reportElement style="Column header" x="319" y="19" width="92" height="15" uuid="baf537ca-32ce-4865-abc2-bbc556ffb289"/>
+				<text><![CDATA[Fecha]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="368" y="19" width="92" height="15" uuid="43cc02ba-09b2-4e5d-994d-9cd26f56b477"/>
-				<text><![CDATA[Time]]></text>
-			</staticText>
-			<staticText>
-				<reportElement style="Column header" x="460" y="19" width="92" height="15" uuid="cf310de6-67c5-4893-baee-b3b9b4ea6818"/>
-				<text><![CDATA[user_id]]></text>
+				<reportElement style="Column header" x="421" y="19" width="92" height="15" uuid="43cc02ba-09b2-4e5d-994d-9cd26f56b477"/>
+				<text><![CDATA[Hora]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -95,24 +92,20 @@
 				<textFieldExpression><![CDATA[$F{ID}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Detail" x="92" y="0" width="92" height="15" uuid="9e85efb4-e06d-4bc8-bab8-6b510ef4498a"/>
+				<reportElement style="Detail" x="105" y="0" width="92" height="15" uuid="9e85efb4-e06d-4bc8-bab8-6b510ef4498a"/>
 				<textFieldExpression><![CDATA[$F{Title}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Detail" x="184" y="0" width="92" height="15" uuid="e8c50e4c-2711-46a1-ba05-6fec590a0eb2"/>
+				<reportElement style="Detail" x="209" y="0" width="92" height="15" uuid="e8c50e4c-2711-46a1-ba05-6fec590a0eb2"/>
 				<textFieldExpression><![CDATA[$F{Description}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Detail" x="276" y="0" width="92" height="15" uuid="31b5ae34-1b4b-47fd-aa23-8d229e556477"/>
+				<reportElement style="Detail" x="319" y="0" width="92" height="15" uuid="31b5ae34-1b4b-47fd-aa23-8d229e556477"/>
 				<textFieldExpression><![CDATA[$F{Date}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Detail" x="368" y="0" width="92" height="15" uuid="ab87d899-bed1-4d6a-b028-18a1b32a171b"/>
+				<reportElement style="Detail" x="421" y="0" width="92" height="15" uuid="ab87d899-bed1-4d6a-b028-18a1b32a171b"/>
 				<textFieldExpression><![CDATA[$F{Time}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement style="Detail" x="460" y="0" width="92" height="15" uuid="b6db103c-68aa-4c2b-b2e1-09517b02b311"/>
-				<textFieldExpression><![CDATA[$F{user_id}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

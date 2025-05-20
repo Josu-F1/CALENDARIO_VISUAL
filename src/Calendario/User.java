@@ -4,8 +4,13 @@ public class User {
     private int ID;
     private String username;
     private String password;
+    
+
 
     public User() {}
+public int getId() {
+    return ID;
+}
 
     public User(int ID, String username, String password) {
         this.ID = ID;
@@ -21,4 +26,5 @@ public class User {
 
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
+    
 }
