@@ -18,6 +18,13 @@ public class DatabaseCompleto {
             e.printStackTrace();
         }
     }
+        public static Connection getConnection() throws SQLException {
+        String url = "jdbc:mysql://localhost/calendar";
+        String user = "root";
+        String password = ""; // cambia según tu config
+
+        return DriverManager.getConnection(url, user, password);
+    }
 
     // Registro de usuario (sin encriptar la contraseña, idealmente hashea)
     public boolean addUser(User u) {

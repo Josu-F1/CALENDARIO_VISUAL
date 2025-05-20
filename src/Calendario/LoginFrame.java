@@ -7,6 +7,8 @@ public class LoginFrame extends JFrame {
     private JTextField usernameField;
     private JPasswordField passwordField;
     private DatabaseCompleto db;
+    public static User currentUser;
+
 
     public LoginFrame() {
         setTitle("Login / Registro");

@@ -6,6 +6,8 @@ package Calendario;
 
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import static jdk.nashorn.internal.runtime.Debug.id;
+
 
 /**
  *
@@ -19,6 +21,8 @@ public class Login extends javax.swing.JPanel {
         this.main = main;
         initComponents();
     }
+    public static User currentUser;
+
 
   public void ingresar() {
     String usuario = jTxtUsuarioL.getText().trim();
@@ -30,12 +34,15 @@ public class Login extends javax.swing.JPanel {
     if (user != null) {
         JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso.");
 
+        Login.currentUser = user;
         // Mostrar la agenda
         Agenda agenda = new Agenda(user);
         agenda.setVisible(true);
 
         // Cerrar ventana actual (Login)
         SwingUtilities.getWindowAncestor(this).dispose();
+        
+
     } else {
         JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos.");
     }
@@ -140,7 +147,8 @@ public class Login extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBtnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnIngresarActionPerformed
-        // TODO add your handling code here:
+         // usa tus datos reales
+// TODO add your handling code here:
         ingresar();
     }//GEN-LAST:event_jBtnIngresarActionPerformed
 
