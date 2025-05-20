@@ -35,11 +35,11 @@
               <Component id="jBntReportes" min="-2" pref="164" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
               <Component id="jBntAgregarEvento" min="-2" pref="164" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="46" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
               <Component id="jBtnEditar" min="-2" pref="140" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
-              <Component id="jBtnEliminar" min="-2" pref="140" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
+              <Component id="jBtnEliminar" min="-2" pref="148" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -56,16 +56,14 @@
                       <Component id="jScrollPane1" min="-2" pref="297" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="32" max="32767" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jBtnEditar" alignment="0" min="-2" pref="46" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jBtnEliminar" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
-                      <Component id="jBntAgregarEvento" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
-                      <Component id="jBntReportes" alignment="3" min="-2" pref="45" max="-2" attributes="0"/>
-                  </Group>
+              <EmptySpace pref="31" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="jBtnEliminar" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
+                  <Component id="jBntAgregarEvento" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
+                  <Component id="jBntReportes" alignment="3" min="-2" pref="45" max="-2" attributes="0"/>
+                  <Component id="jBtnEditar" alignment="3" min="-2" pref="46" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
