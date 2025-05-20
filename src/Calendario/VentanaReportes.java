@@ -19,8 +19,6 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
 
-
-
 /**
  *
  * @author MARLON
@@ -33,7 +31,7 @@ public class VentanaReportes extends javax.swing.JFrame {
     public VentanaReportes() {
         initComponents();
         llenarFechas();
-        
+
     }
 
     /**
@@ -85,7 +83,7 @@ public class VentanaReportes extends javax.swing.JFrame {
                 {null, null, null, null, null}
             },
             new String [] {
-                "ID", "Title", "Description", "Date", "Time"
+                "ID DEL EVENTO", "TITULO", "DESCRIPCION", "FECHA", "HORA"
             }
         ));
         jScrollPane1.setViewportView(tablaEventos);
@@ -154,11 +152,14 @@ public class VentanaReportes extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(JButton1)
-                        .addGap(73, 73, 73))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(62, Short.MAX_VALUE)
+                        .addComponent(btnGenerarReporte)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(JButton, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(JButton1)
                             .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -196,15 +197,11 @@ public class VentanaReportes extends javax.swing.JFrame {
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(btnGenerarReporteMes)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(btnR2Grafico, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnGenerarReporte)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(JButton, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(19, 19, 19)))
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 456, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(17, Short.MAX_VALUE))
+                                        .addComponent(btnR2Grafico, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 503, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -252,30 +249,28 @@ public class VentanaReportes extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
-    
     private void llenarFechas() {
         // Para los nuevos comboBox de reporte por mes
-for (int i = 2023; i <= 2030; i++) {
-    cmbAnioR2.addItem(String.valueOf(i));
-}
+        for (int i = 2023; i <= 2030; i++) {
+            cmbAnioR2.addItem(String.valueOf(i));
+        }
 
-for (int i = 1; i <= 12; i++) {
-    cmbMesR2.addItem(String.format("%02d", i));
-}
+        for (int i = 1; i <= 12; i++) {
+            cmbMesR2.addItem(String.format("%02d", i));
+        }
 
-for (int i = 2023; i <= 2030; i++) {
-        cmbAnio.addItem(String.format("%02d", i));
+        for (int i = 2023; i <= 2030; i++) {
+            cmbAnio.addItem(String.format("%02d", i));
+        }
+
+        for (int i = 1; i <= 12; i++) {
+            cmbMes.addItem(String.format("%02d", i));
+        }
+
+        for (int i = 1; i <= 31; i++) {
+            cmbDia.addItem(String.format("%02d", i));
+        }
     }
-
-    for (int i = 1; i <= 12; i++) {
-        cmbMes.addItem(String.format("%02d", i));
-    }
-
-    for (int i = 1; i <= 31; i++) {
-        cmbDia.addItem(String.format("%02d", i));
-    }
-}
 
     private void JButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JButtonActionPerformed
         buscarPorFecha();
@@ -286,10 +281,9 @@ for (int i = 2023; i <= 2030; i++) {
 
         try {
             String dia = cmbDia.getSelectedItem().toString();
-String mes = cmbMes.getSelectedItem().toString();
-String anio = cmbAnio.getSelectedItem().toString();
-String fechaStr = anio + "-" + mes + "-" + dia;
-
+            String mes = cmbMes.getSelectedItem().toString();
+            String anio = cmbAnio.getSelectedItem().toString();
+            String fechaStr = anio + "-" + mes + "-" + dia;
 
             if (fechaStr.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Por favor ingrese una fecha en formato YYYY-MM-DD.");
@@ -314,7 +308,7 @@ String fechaStr = anio + "-" + mes + "-" + dia;
             // Rellenar y mostrar
             JasperPrint print = JasperFillManager.fillReport(reporte, parametros, conn);
             JasperViewer.viewReport(print, false);
-*/
+             */
         } catch (Exception ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error al generar el reporte: " + ex.getMessage());
@@ -335,41 +329,40 @@ String fechaStr = anio + "-" + mes + "-" + dia;
 
         // TODO add your handling code here:
         try {
-        // Obtener datos desde los nuevos comboBox
-        String mes = cmbMesR2.getSelectedItem().toString();
-        String anio = cmbAnioR2.getSelectedItem().toString();
+            // Obtener datos desde los nuevos comboBox
+            String mes = cmbMesR2.getSelectedItem().toString();
+            String anio = cmbAnioR2.getSelectedItem().toString();
 
-        if (mes.isEmpty() || anio.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor seleccione un mes y año.");
-            return;
+            if (mes.isEmpty() || anio.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Por favor seleccione un mes y año.");
+                return;
+            }
+
+            // Convertir a números si es necesario
+            int mesNum = Integer.parseInt(mes);
+            int anioNum = Integer.parseInt(anio);
+
+            // Parámetros para el reporte
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("Mes", mesNum);
+            parametros.put("Anio", anioNum);
+            parametros.put("user_id", Login.currentUser.getId());
+
+            // Ruta del reporte (ajústala si es diferente)
+            mostrarReporte("src/Reportes/ReporteMes.jasper", parametros);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al generar el reporte por mes: " + ex.getMessage());
         }
-
-        // Convertir a números si es necesario
-        int mesNum = Integer.parseInt(mes);
-        int anioNum = Integer.parseInt(anio);
-
-        // Parámetros para el reporte
-        Map<String, Object> parametros = new HashMap<>();
-        parametros.put("Mes", mesNum);
-        parametros.put("Anio", anioNum);
-        parametros.put("user_id", Login.currentUser.getId());
-
-        // Ruta del reporte (ajústala si es diferente)
-        mostrarReporte("src/Reportes/ReporteMes.jasper", parametros);
-
-    } catch (Exception ex) {
-        ex.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Error al generar el reporte por mes: " + ex.getMessage());
-    }
     }//GEN-LAST:event_btnGenerarReporteMesActionPerformed
 
     private void btnR2GraficoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnR2GraficoActionPerformed
-       try {
+        try {
             String dia = cmbDia.getSelectedItem().toString();
-String mes = cmbMes.getSelectedItem().toString();
-String anio = cmbAnio.getSelectedItem().toString();
-String fechaStr = anio + "-" + mes + "-" + dia;
-
+            String mes = cmbMes.getSelectedItem().toString();
+            String anio = cmbAnio.getSelectedItem().toString();
+            String fechaStr = anio + "-" + mes + "-" + dia;
 
             if (fechaStr.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Por favor ingrese una fecha en formato YYYY-MM-DD.");
@@ -394,7 +387,7 @@ String fechaStr = anio + "-" + mes + "-" + dia;
             // Rellenar y mostrar
             JasperPrint print = JasperFillManager.fillReport(reporte, parametros, conn);
             JasperViewer.viewReport(print, false);
-*/
+             */
         } catch (Exception ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error al generar el reporte: " + ex.getMessage());
@@ -406,13 +399,13 @@ String fechaStr = anio + "-" + mes + "-" + dia;
     }//GEN-LAST:event_cmbMesR2ActionPerformed
 
     private void JButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JButton1ActionPerformed
-buscarPorMes();        // TODO add your handling code here:
+        buscarPorMes();        // TODO add your handling code here:
     }//GEN-LAST:event_JButton1ActionPerformed
     private void buscarPorFecha() {
-            String dia = cmbDia.getSelectedItem().toString();
-    String mes = cmbMes.getSelectedItem().toString();
-    String anio = cmbAnio.getSelectedItem().toString();
-    String fechaTexto = anio + "-" + mes + "-" + dia;
+        String dia = cmbDia.getSelectedItem().toString();
+        String mes = cmbMes.getSelectedItem().toString();
+        String anio = cmbAnio.getSelectedItem().toString();
+        String fechaTexto = anio + "-" + mes + "-" + dia;
 
         if (fechaTexto.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Ingrese una fecha en formato YYYY-MM-DD.");
@@ -423,7 +416,7 @@ buscarPorMes();        // TODO add your handling code here:
             String sql = "SELECT * FROM calendar WHERE Date = ? AND user_id = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setDate(1, java.sql.Date.valueOf(fechaTexto));
-            
+
             stmt.setInt(2, Login.currentUser.getId());  // <- usa el ID del usuario actual
 
             ResultSet rs = stmt.executeQuery();
@@ -446,42 +439,42 @@ buscarPorMes();        // TODO add your handling code here:
             JOptionPane.showMessageDialog(this, "Error al buscar eventos.");
         }
     }
+
     private void buscarPorMes() {
-    String mes = cmbMesR2.getSelectedItem().toString();
-    String anio = cmbAnioR2.getSelectedItem().toString();
+        String mes = cmbMesR2.getSelectedItem().toString();
+        String anio = cmbAnioR2.getSelectedItem().toString();
 
-    if (mes.isEmpty() || anio.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Seleccione un mes y un año válidos.");
-        return;
-    }
-
-    try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/calendar", "root", "")) {
-        String sql = "SELECT * FROM calendar WHERE MONTH(Date) = ? AND YEAR(Date) = ? AND user_id = ?";
-        PreparedStatement stmt = conn.prepareStatement(sql);
-        stmt.setInt(1, Integer.parseInt(mes));
-        stmt.setInt(2, Integer.parseInt(anio));
-        stmt.setInt(3, Login.currentUser.getId()); 
-        ResultSet rs = stmt.executeQuery();
-
-        DefaultTableModel model = (DefaultTableModel) tablaEventos.getModel();
-        model.setRowCount(0); // Limpiar tabla
-
-        while (rs.next()) {
-            model.addRow(new Object[]{
-                rs.getInt("ID"),
-                rs.getString("Title"),
-                rs.getString("Description"),
-                rs.getDate("Date"),
-                rs.getTime("Time")
-            });
+        if (mes.isEmpty() || anio.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Seleccione un mes y un año válidos.");
+            return;
         }
 
-    } catch (Exception ex) {
-        ex.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Error al buscar eventos por mes.");
-    }
-}
+        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/calendar", "root", "")) {
+            String sql = "SELECT * FROM calendar WHERE MONTH(Date) = ? AND YEAR(Date) = ? AND user_id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, Integer.parseInt(mes));
+            stmt.setInt(2, Integer.parseInt(anio));
+            stmt.setInt(3, Login.currentUser.getId());
+            ResultSet rs = stmt.executeQuery();
 
+            DefaultTableModel model = (DefaultTableModel) tablaEventos.getModel();
+            model.setRowCount(0); // Limpiar tabla
+
+            while (rs.next()) {
+                model.addRow(new Object[]{
+                    rs.getInt("ID"),
+                    rs.getString("Title"),
+                    rs.getString("Description"),
+                    rs.getDate("Date"),
+                    rs.getTime("Time")
+                });
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al buscar eventos por mes.");
+        }
+    }
 
     public void mostrarReporte(String rutaRelativa, Map<String, Object> parametros) {
         try {
